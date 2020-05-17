@@ -65,7 +65,7 @@ public class SpongeLuckRankup implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
         src.sendMessage(Text.of(RankupCommand.doRankUp(config.getNode("backendName").getString(),
                 config.getNode("frontendName").getString(), config.getNode("track").getString(), src.getIdentifier(),
-                luckPerms)));
+                luckPerms, config.getNode("debug").getBoolean())));
         return null;
     }
 }
