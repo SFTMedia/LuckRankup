@@ -72,7 +72,7 @@ public class RankupCommand {
                         System.out.println("highest group: " + groupsOnTrack.get(0));
                     }
                     int neededHours = Integer.parseInt(luckPerms.getGroupManager().loadGroup(nextRank).join().get()
-                            .getCachedData().getMetaData(luckPerms.getContextManager().getQueryOptions(user).get())
+                            .getCachedData().getMetaData(luckPerms.getContextManager().getStaticQueryOptions())
                             .getMetaValue("hoursNeeded"));
                     if (debug) {
                         System.out.println("needed hours: " + neededHours);
