@@ -1,10 +1,12 @@
 package com.blalp.luckrankup;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
 import com.blalp.luckrankup.common.RankupCommand;
+import com.google.inject.Inject;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.spongepowered.api.Sponge;
@@ -14,6 +16,7 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -30,6 +33,9 @@ public class SpongeLuckRankup implements CommandExecutor {
 
     private LuckPerms luckPerms;
     private @NonNull ConfigurationNode config;
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private Path configFolder;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -42,7 +48,10 @@ public class SpongeLuckRankup implements CommandExecutor {
             return;
         }
         try {
-            config = YAMLConfigurationLoader.builder().setPath(Paths.get("config.yml")).build().load();
+            Sponge.getAssetManager().getAsset(this, "config.yml").get()
+                    .copyToFile(Paths.get(configFolder.toAbsolutePath().toString(), "config.yml"));
+            config = YAMLConfigurationLoader.builder()
+                    .setPath(Paths.get(configFolder.toAbsolutePath().toString(), "config.yml")).build().load();
         } catch (IOException e) {
             e.printStackTrace();
         }
